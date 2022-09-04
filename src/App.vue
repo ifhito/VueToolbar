@@ -1,23 +1,127 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
-<template>
-  <HelloWorld msg="Vite + Vue" />
-</template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+  import { text } from '@fortawesome/fontawesome-svg-core';
+  import { ref } from 'vue'
+  import Button from './components/Atoms/Button.vue';
+  import ToolTipsGroup from './components/Molecules/ToolTipsGroup.vue';
+  import ToolBar from './components/Organisms/ToolBar.vue';
+  
+  defineProps<{ msg: string }>()
+  
+  const count = ref(0)
+  const func = ref(()=>{alert("click")})
+  const select = ref()
+  const selected = ref(()=> {select.value = window.getSelection()})
+  
+  // TODO: spanでboldした後の続きの文章は普通の文字にしたい。
+  const changeStyleFunc = (style:string) => {
+    console.log(select.value)
+    if(!select.value?.rangeCount) return;
+    const range = select.value.getRangeAt(0);
+    const newNode = document.createElement('span');
+    newNode.setAttribute('style', style);
+    // 文字の周りにspanを追加
+    range.surroundContents(newNode)
+    //続きの文章が太文字にならないようにCaret位置を変更する
+    const textarea = document.getElementById("textarea-sent");
+    // 空白を最後の子要素に入れる
+    const txt = document.createTextNode("\u00a0");
+    textarea?.appendChild(txt);
+    textarea?.focus()
+    const r = document.createRange()
+    r.setStart(textarea, textarea?.childNodes.length);
+    r.setEnd(textarea, textarea?.childNodes.length);
+    select.value.removeAllRanges();
+    select.value.addRange(r);
+  }
+  
+  // TODO:クリップボードへのペースト
+  const CPCFunc = async (event) => {
+    switch(event){
+      case "cut":
+        if (navigator.clipboard && !select.value.toString() == false) {
+          await navigator.clipboard.writeText(select.value.toString());
+          select.value.deleteFromDocument();
+        } else {
+          alert("clipboardAPIに対応していません");
+        }
+        break;
+      case "copy":
+        if (navigator.clipboard && !select.value.toString() == false) {
+          await navigator.clipboard.writeText(select.value.toString());
+        } else {
+          alert("clipboardAPIに対応していません");
+        }
+        break
+      case "paste":
+        if (navigator.clipboard) {
+          const target = document.getElementById("textarea-sent");
+          await navigator.clipboard.readText().then((text)=>{
+            if (!select.value || !select.value.rangeCount) throw new Error("何かおかしい");
+            select.value.deleteFromDocument();
+            select.value.getRangeAt(0).insertNode(document.createTextNode(text));
+          });
+        } else {
+          alert("clipboardAPIに対応していません");
+        }
+    }
+  }
+  const tooltipsListOfFixStyle = [
+    {
+      iconName: "coffee",
+      onClick: ()=>changeStyleFunc("font-weight: bold;")
+    },
+    {
+      iconName: "coffee",
+      onClick: ()=>changeStyleFunc("color: blue;")
+    }
+  ]
+  const tooltipsListOfCCP = [
+    {
+      iconName: "coffee",
+      onClick: ()=>CPCFunc("copy")
+    },
+    {
+      iconName: "coffee",
+      onClick: ()=>CPCFunc("cut")
+    },
+    {
+      iconName: "coffee",
+      onClick: ()=>CPCFunc("paste")
+    }
+  ]
+  const toolBarList = [
+    {
+      GroupName: "FixStyle",
+      tooltipsGroupList: tooltipsListOfFixStyle
+    },
+    {
+      GroupName: "CopyAndPasteAndCut",
+      tooltipsGroupList: tooltipsListOfCCP
+    }
+  ]
+  </script>
+  
+  <template>
+    <ToolBar :tool-bar-list="toolBarList"/>
+    <div
+    role="textarea"
+    @select="selected"
+    @blur="selected"
+    @keyup="selected"
+    @click="selected"
+    name="sentence"
+    id="textarea-sent"
+    cols="30"
+    rows="10"
+    contenteditable="true">
+    </div>
+  </template>
+  
+  <style scoped>
+    #textarea-sent {
+      width: 600px;
+      background-color: aquamarine;
+      color: black;
+    }
+  </style>
+  
