@@ -112,11 +112,13 @@ import { tooltipsGroupType } from './lib';
     const index = [].findIndex.call(elements, e => e === event.target)
     switch(event.key){
       case "ArrowLeft":
-        changeFocus(index, -1);
+        if(!elements[index - 1]) return
+        changeFocus(index, - 1);
         elements[index - 1].focus()
         changeFocus(index - 1, 0);
         break;
       case "ArrowRight":
+        if(!elements[index + 1]) return
         changeFocus(index, -1);
         elements[index + 1].focus()
         changeFocus(index + 1, 0);
