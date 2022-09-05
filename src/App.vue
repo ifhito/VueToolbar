@@ -68,29 +68,29 @@ import { tooltipsGroupType } from './lib';
   }
   const tooltipsListOfFixStyle = [
     {
-      iconName: "coffee",
+      iconName: "bold",
       tabindex: 0,
       onClick: ()=>changeStyleFunc("font-weight: bold;")
     },
     {
-      iconName: "coffee",
+      iconName: "palette",
       tabindex: -1,
       onClick: ()=>changeStyleFunc("color: blue;")
     }
   ]
   const tooltipsListOfCCP = [
     {
-      iconName: "coffee",
+      iconName: "copy",
       tabindex: -1,
       onClick: ()=>CPCFunc("copy")
     },
     {
-      iconName: "coffee",
+      iconName: "scissors",
       tabindex: -1,
       onClick: ()=>CPCFunc("cut")
     },
     {
-      iconName: "coffee",
+      iconName: "paste",
       tabindex: -1,
       onClick: ()=>CPCFunc("paste")
     }
@@ -112,19 +112,19 @@ import { tooltipsGroupType } from './lib';
     switch(event.key){
       case "ArrowLeft":
         if(!elements[index - 1]) return
-        changeFocus(index, - 1);
+        changeTabindex(index, - 1);
         elements[index - 1].focus()
-        changeFocus(index - 1, 0);
+        changeTabindex(index - 1, 0);
         break;
       case "ArrowRight":
         if(!elements[index + 1]) return
-        changeFocus(index, -1);
+        changeTabindex(index, -1);
         elements[index + 1].focus()
-        changeFocus(index + 1, 0);
+        changeTabindex(index + 1, 0);
         break;
     }
   }
-  const changeFocus = (index, tabindex) => {
+  const changeTabindex = (index, tabindex) => {
     let indexTmp = index;
     for(let tool of toolBarList){
       if(indexTmp < tool.tooltipsGroupList.length){ 
