@@ -106,7 +106,6 @@ import { tooltipsGroupType } from './lib';
     }
   ])
 
-  const nowIndex = ref(0);
   const changeTool = (event) => {
     const elements = document.getElementsByClassName('tooltip')
     const index = [].findIndex.call(elements, e => e === event.target)
@@ -127,7 +126,6 @@ import { tooltipsGroupType } from './lib';
   }
   const changeFocus = (index, tabindex) => {
     let indexTmp = index;
-    const toolBarListObj = toolBarList
     for(let tool of toolBarList){
       if(indexTmp < tool.tooltipsGroupList.length){ 
         let tooltmp = tool.tooltipsGroupList[indexTmp]
