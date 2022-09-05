@@ -7,7 +7,7 @@
 </script>
     
 <template>
-    <button @click="() => onClick()">
+    <button @click="() => onClick()" class="tooltip">
     <slot></slot>
     </button>
 </template>

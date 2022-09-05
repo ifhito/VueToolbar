@@ -1,10 +1,11 @@
 <script setup lang="ts">
   import { text } from '@fortawesome/fontawesome-svg-core';
-  import { ref } from 'vue'
+  import { reactive, ref, toRaw, watch } from 'vue'
   import Button from './components/Atoms/Button.vue';
   import ToolTipsGroup from './components/Molecules/ToolTipsGroup.vue';
   import ToolBar from './components/Organisms/ToolBar.vue';
   import "./lib.d.ts";
+import { tooltipsGroupType } from './lib';
   defineProps<{ msg: string }>()
   
   const count = ref(0)
@@ -12,7 +13,7 @@
   const select = ref()
   const selected = ref(()=> {select.value = window.getSelection()})
   
-  // TODO: spanでboldした後の続きの文章は普通の文字にしたい。
+  // DONE: spanでboldした後の続きの文章は普通の文字にしたい。
   const changeStyleFunc = (style:string) => {
     console.log(select.value)
     if(!select.value?.rangeCount) return;
@@ -34,7 +35,7 @@
     select.value.addRange(r);
   }
   
-  // TODO:クリップボードへのペースト
+  // DONE:クリップボードへのペースト
   const CPCFunc = async (event) => {
     switch(event){
       case "cut":
@@ -94,7 +95,7 @@
       onClick: ()=>CPCFunc("paste")
     }
   ]
-  const toolBarList = [
+  const toolBarList = reactive([
     {
       GroupName: "FixStyle",
       tooltipsGroupList: tooltipsListOfFixStyle
@@ -103,11 +104,42 @@
       GroupName: "CopyAndPasteAndCut",
       tooltipsGroupList: tooltipsListOfCCP
     }
-  ]
+  ])
+
+  const changeTool = (event) => {
+    const elements = document.getElementsByClassName('tooltip')
+    const index = [].findIndex.call(elements, e => e === event.target)
+    switch(event.key){
+      case "ArrowLeft":
+        if(!elements[index - 1]) return
+        changeFocus(index, - 1);
+        elements[index - 1].focus()
+        changeFocus(index - 1, 0);
+        break;
+      case "ArrowRight":
+        if(!elements[index + 1]) return
+        changeFocus(index, -1);
+        elements[index + 1].focus()
+        changeFocus(index + 1, 0);
+        break;
+    }
+  }
+  const changeFocus = (index, tabindex) => {
+    let indexTmp = index;
+    for(let tool of toolBarList){
+      if(indexTmp < tool.tooltipsGroupList.length){ 
+        let tooltmp = tool.tooltipsGroupList[indexTmp]
+        tooltmp.tabindex = tabindex
+        tool.tooltipsGroupList.splice(indexTmp, 1, tooltmp);
+        return
+      }
+      indexTmp -= tool.tooltipsGroupList.length;
+    }
+  }
   </script>
   
   <template>
-    <ToolBar :tool-bar-list="toolBarList"/>
+    <ToolBar @keydown="changeTool" :tool-bar-list="toolBarList"/>
     <div
     role="textarea"
     @select="selected"
@@ -118,7 +150,8 @@
     id="textarea-sent"
     cols="30"
     rows="10"
-    contenteditable="true">
+    contenteditable="true"
+    >
     </div>
   </template>
   
