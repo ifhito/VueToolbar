@@ -158,6 +158,9 @@ import { tooltipsGroupType } from './lib';
   <style scoped>
     #textarea-sent {
       width: 600px;
+      height: 400px;
+      text-align: left;
+      padding: 1rem;
       background-color: aquamarine;
       color: black;
     }
