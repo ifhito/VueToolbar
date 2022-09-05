@@ -4,7 +4,7 @@
   import Button from './components/Atoms/Button.vue';
   import ToolTipsGroup from './components/Molecules/ToolTipsGroup.vue';
   import ToolBar from './components/Organisms/ToolBar.vue';
-  
+  import "./lib.d.ts";
   defineProps<{ msg: string }>()
   
   const count = ref(0)
@@ -68,24 +68,29 @@
   const tooltipsListOfFixStyle = [
     {
       iconName: "coffee",
+      tabindex: 0,
       onClick: ()=>changeStyleFunc("font-weight: bold;")
     },
     {
       iconName: "coffee",
+      tabindex: -1,
       onClick: ()=>changeStyleFunc("color: blue;")
     }
   ]
   const tooltipsListOfCCP = [
     {
       iconName: "coffee",
+      tabindex: -1,
       onClick: ()=>CPCFunc("copy")
     },
     {
       iconName: "coffee",
+      tabindex: -1,
       onClick: ()=>CPCFunc("cut")
     },
     {
       iconName: "coffee",
+      tabindex: -1,
       onClick: ()=>CPCFunc("paste")
     }
   ]

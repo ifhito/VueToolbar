@@ -1,14 +1,12 @@
 <script setup lang="ts">
     import { ref, defineProps  } from 'vue'
     import Button from '../Atoms/Button.vue';
-import ToolTipsGroup from '../Molecules/ToolTipsGroup.vue';
+    import ToolTipsGroup from '../Molecules/ToolTipsGroup.vue';
+    import { tooltipsGroupType } from '../../lib';
     interface Props {
         toolBarList: {
             GroupName: string;
-            tooltipsGroupList: {
-                onClick: () => void;
-                iconName: string;
-            }[];
+            tooltipsGroupList: tooltipsGroupType;
         }[];
     }
     const props = defineProps<Props>()
