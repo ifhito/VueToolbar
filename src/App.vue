@@ -111,6 +111,7 @@ import { tooltipsGroupType } from './lib';
     const index = [].findIndex.call(elements, e => e === event.target)
     switch(event.key){
       case "ArrowLeft":
+        // 矢印キーが押されたら、フォーカスとtabindexを変更する。
         if(!elements[index - 1]) return
         changeTabindex(index, - 1);
         elements[index - 1].focus()
@@ -124,6 +125,7 @@ import { tooltipsGroupType } from './lib';
         break;
     }
   }
+  // tabindexを変更する関数。
   const changeTabindex = (index, tabindex) => {
     let indexTmp = index;
     for(let tool of toolBarList){
@@ -139,6 +141,7 @@ import { tooltipsGroupType } from './lib';
   </script>
   
   <template>
+    <label for="textarea-sent">リッチテキストボックス</label>
     <ToolBar @keydown="changeTool" :tool-bar-list="toolBarList"/>
     <div
     role="textarea"
@@ -151,6 +154,8 @@ import { tooltipsGroupType } from './lib';
     cols="30"
     rows="10"
     contenteditable="true"
+    aria-multiline="true"
+    area-labeledby="richtextbox"
     >
     </div>
   </template>
