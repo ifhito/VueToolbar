@@ -70,11 +70,13 @@ import { tooltipsGroupType } from './lib';
     {
       iconName: "bold",
       tabindex: 0,
+      tooltipText: "太文字にする",
       onClick: ()=>changeStyleFunc("font-weight: bold;")
     },
     {
       iconName: "palette",
       tabindex: -1,
+      tooltipText: "色を青に変更する",
       onClick: ()=>changeStyleFunc("color: blue;")
     }
   ]
@@ -82,16 +84,19 @@ import { tooltipsGroupType } from './lib';
     {
       iconName: "copy",
       tabindex: -1,
+      tooltipText: "コピーする",
       onClick: ()=>CPCFunc("copy")
     },
     {
       iconName: "scissors",
       tabindex: -1,
+      tooltipText: "カットする",
       onClick: ()=>CPCFunc("cut")
     },
     {
       iconName: "paste",
       tabindex: -1,
+      tooltipText: "ペーストする",
       onClick: ()=>CPCFunc("paste")
     }
   ]
@@ -141,7 +146,7 @@ import { tooltipsGroupType } from './lib';
   </script>
   
   <template>
-    <label for="textarea-sent">リッチテキストボックス</label>
+    <label for="textarea-sent">RICH TEXTBOXS</label>
     <ToolBar @keydown="changeTool" :tool-bar-list="toolBarList"/>
     <div
     role="textarea"
@@ -162,11 +167,13 @@ import { tooltipsGroupType } from './lib';
   
   <style scoped>
     #textarea-sent {
+      color:chocolate;
       width: 600px;
       height: 400px;
       text-align: left;
       padding: 1rem;
       background-color: aquamarine;
+      border-radius: 10px;
       color: black;
     }
   </style>

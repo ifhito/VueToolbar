@@ -22,7 +22,10 @@
 .toolbar {
     display: flex;
     justify-content: space-around;
-    width: 100%;
+    width: 50%;
+    margin: 0.5rem auto;
+    box-shadow: 1px 1px 7px 0px rgb(15 0 0 / 60%);
+    border-radius: 10px;
 }
 </style>
     
