@@ -174,6 +174,7 @@ import { tooltipsGroupType } from './lib';
       background-color: aquamarine;
       border-radius: 10px;
       color: black;
+      box-shadow: 1px 1px 7px 0px rgb(15 0 0 / 60%);
     }
     .toolbar-label {
       color:chocolate;
