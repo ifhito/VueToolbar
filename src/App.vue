@@ -146,7 +146,7 @@ import { tooltipsGroupType } from './lib';
   </script>
   
   <template>
-    <label for="textarea-sent">RICH TEXTBOXS</label>
+    <label class="toolbar-label" for="textarea-sent">RICH TEXTBOXS</label>
     <ToolBar @keydown="changeTool" :tool-bar-list="toolBarList"/>
     <div
     role="textarea"
@@ -167,7 +167,6 @@ import { tooltipsGroupType } from './lib';
   
   <style scoped>
     #textarea-sent {
-      color:chocolate;
       width: 600px;
       height: 400px;
       text-align: left;
@@ -175,6 +174,9 @@ import { tooltipsGroupType } from './lib';
       background-color: aquamarine;
       border-radius: 10px;
       color: black;
+    }
+    .toolbar-label {
+      color:chocolate;
     }
   </style>
   
