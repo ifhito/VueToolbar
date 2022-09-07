@@ -20,7 +20,7 @@
 <style scoped>
     
     .toolGroup {
-        margin: 0.2rem;
+        margin: 0.2rem 0.5rem;
         padding: 0.1rem 0.3rem;
         border-radius: 10px;
         box-shadow: inset 1px 1px 7px 0px rgb(15 0 0 / 60%);
