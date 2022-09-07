@@ -30,6 +30,7 @@
         cursor: pointer;
         margin: 0.1em;
         font-size: 0.7rem;
+        box-shadow: 1px 1px 4px 0px rgb(15 0 0 / 60%);
     }
 
     /* ツールチップのテキスト */
