@@ -5,17 +5,40 @@
   import ToolTipsGroup from './components/Molecules/ToolTipsGroup.vue';
   import ToolBar from './components/Organisms/ToolBar.vue';
   import "./lib.d.ts";
-import { tooltipsGroupType } from './lib';
+  import { tooltipsGroupType, areaPropaties } from './lib';
   defineProps<{ msg: string }>()
   
   const count = ref(0)
   const func = ref(()=>{alert("click")})
   const select = ref()
-  const selected = ref(()=> {select.value = window.getSelection()})
+  const selectText = ref<string | undefined>('')
+  const selected = ref(()=> {
+    select.value = window.getSelection()
+    selectText.value = window.getSelection()?.toString()
+  })
+
+  const disableFunc = async () => {
+    const text = await navigator.clipboard.readText()
+    if(selectText.value === '') {
+      const templist = tooltipsListOfCCP.value.map((item)=>{
+        if(item.iconName === "paste" && text !== '') return item
+        item.areaPropaties.disabled = true
+        return item 
+      })
+      tooltipsListOfCCP.value = templist
+    }else{
+      const templist = tooltipsListOfCCP.value.map((item)=>{
+        if(item.iconName === "paste" && text === '') return item
+        item.areaPropaties.disabled = false
+        return item 
+      })
+      tooltipsListOfCCP.value = templist
+    }
+  }
+  watch(selectText, disableFunc, {immediate: true})
   
   // DONE: spanでboldした後の続きの文章は普通の文字にしたい。
   const changeStyleFunc = (style:string) => {
-    console.log(select.value)
     if(!select.value?.rangeCount) return;
     const range = select.value.getRangeAt(0);
     const newNode = document.createElement('span');
@@ -23,7 +46,7 @@ import { tooltipsGroupType } from './lib';
     // 文字の周りにspanを追加
     range.surroundContents(newNode)
     //続きの文章が太文字にならないようにCaret位置を変更する
-    const textarea = document.getElementById("textarea-sent");
+    const textarea = document.getElementById("textarea-sent") as Node;
     // 空白を最後の子要素に入れる
     const txt = document.createTextNode("\u00a0");
     textarea?.appendChild(txt);
@@ -38,10 +61,12 @@ import { tooltipsGroupType } from './lib';
   // DONE:クリップボードへのペースト
   const CPCFunc = async (event) => {
     switch(event){
-      case "cut":
+      case "scissors":
         if (navigator.clipboard && !select.value.toString() == false) {
+          console.log("test")
           await navigator.clipboard.writeText(select.value.toString());
           select.value.deleteFromDocument();
+          disableFunc()
         } else {
           alert("clipboardAPIに対応していません");
         }
@@ -49,6 +74,7 @@ import { tooltipsGroupType } from './lib';
       case "copy":
         if (navigator.clipboard && !select.value.toString() == false) {
           await navigator.clipboard.writeText(select.value.toString());
+          disableFunc()
         } else {
           alert("clipboardAPIに対応していません");
         }
@@ -66,48 +92,68 @@ import { tooltipsGroupType } from './lib';
         }
     }
   }
-  const tooltipsListOfFixStyle = [
+  const tooltipsListOfFixStyle = ref([
     {
       iconName: "bold",
       tabindex: 0,
       tooltipText: "太文字にする",
-      onClick: ()=>changeStyleFunc("font-weight: bold;")
+      onClick: ()=>changeStyleFunc("font-weight: bold;"),
+      areaPropaties: {
+        pressed: false,
+        disabled: null
+      }
     },
     {
       iconName: "palette",
       tabindex: -1,
       tooltipText: "色を青に変更する",
-      onClick: ()=>changeStyleFunc("color: blue;")
+      onClick: ()=>changeStyleFunc("color: blue;"),
+      areaPropaties: {
+        pressed: false,
+        disabled: null
+      }
     }
-  ]
-  const tooltipsListOfCCP = [
+  ])
+  const tooltipsListOfCCP = ref([
     {
       iconName: "copy",
       tabindex: -1,
       tooltipText: "コピーする",
-      onClick: ()=>CPCFunc("copy")
+      onClick: (disabled:boolean|null)=> disabled ? console.log(disabled) : console.log(disabled),
+      areaPropaties: {
+        pressed: null,
+        disabled: true
+      }
     },
     {
       iconName: "scissors",
       tabindex: -1,
       tooltipText: "カットする",
-      onClick: ()=>CPCFunc("cut")
+      onClick: (disabled:boolean|null)=> disabled ? console.log(disabled) : CPCFunc("scissors"),
+      areaPropaties: {
+        pressed: null,
+        disabled: true
+      }
     },
     {
       iconName: "paste",
       tabindex: -1,
       tooltipText: "ペーストする",
-      onClick: ()=>CPCFunc("paste")
+      onClick: (disabled:boolean|null)=> disabled ? null : CPCFunc("paste"),
+      areaPropaties: {
+        pressed: null,
+        disabled: false
+      }
     }
-  ]
-  const toolBarList = reactive([
+  ])
+  const toolBarList = ref([
     {
       GroupName: "FixStyle",
-      tooltipsGroupList: tooltipsListOfFixStyle
+      tooltipsGroupList: tooltipsListOfFixStyle.value
     },
     {
       GroupName: "CopyAndPasteAndCut",
-      tooltipsGroupList: tooltipsListOfCCP
+      tooltipsGroupList: tooltipsListOfCCP.value
     }
   ])
 
@@ -125,15 +171,16 @@ import { tooltipsGroupType } from './lib';
       case "ArrowRight":
         if(!elements[index + 1]) return
         changeTabindex(index, -1);
+        console.log(elements[index + 1].focus())
         elements[index + 1].focus()
         changeTabindex(index + 1, 0);
         break;
     }
   }
   // tabindexを変更する関数。
-  const changeTabindex = (index, tabindex) => {
+  const changeTabindex = (index:number, tabindex:number) => {
     let indexTmp = index;
-    for(let tool of toolBarList){
+    for(let tool of toolBarList.value){
       if(indexTmp < tool.tooltipsGroupList.length){ 
         let tooltmp = tool.tooltipsGroupList[indexTmp]
         tooltmp.tabindex = tabindex
@@ -147,6 +194,7 @@ import { tooltipsGroupType } from './lib';
   
   <template>
     <label class="toolbar-label" for="textarea-sent">RICH TEXTBOXS</label>
+    {{select}}
     <ToolBar @keydown="changeTool" :tool-bar-list="toolBarList"/>
     <div
     role="textarea"

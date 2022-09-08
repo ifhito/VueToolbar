@@ -1,13 +1,14 @@
 <script setup lang="ts">
-    import { ref, defineProps  } from 'vue'
-    interface Props {
-        onClick: () => void;
-    }
+    import { ref, defineProps, PropType} from 'vue'
+    import { areaPropaties } from '../../lib';
+    interface Props extends areaPropaties {
+        onClick: (disabled:boolean | null) => void;
+    };
     const props = defineProps<Props>()
 </script>
     
 <template>
-    <button @click="() => onClick()" class="tooltip">
+    <button  class="tooltip">
     <slot></slot>
     </button>
 </template>

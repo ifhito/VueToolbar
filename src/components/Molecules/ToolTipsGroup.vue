@@ -1,19 +1,19 @@
 <script setup lang="ts">
     import { ref, defineProps  } from 'vue'
-    import { tooltipsGroupType } from '../../lib';
     import Button from '../Atoms/Button.vue';
-    interface Props {
-        tooltipsList: tooltipsGroupType
+    import { tooltipsGroupType } from '../../lib';
+    type Props = {
+        tooltipsList: tooltipsGroupType;
     }
     const props = defineProps<Props>()
 </script>
     
 <template>
     <div class="toolGroup">
-        <Button class="tool" :tabindex="tooltips.tabindex" v-for="tooltips in tooltipsList" v-bind:key="tooltips.iconName" :onClick="tooltips.onClick">
+        <button class="tool tooltip" :area-pressed="tooltips.areaPropaties.pressed" :area-disabled="tooltips.areaPropaties.disabled" :tabindex="tooltips.tabindex" v-for="tooltips in tooltipsList" v-bind:key="tooltips.iconName" :onClick="tooltips.onClick" @click="() => tooltips.onClick(tooltips.areaPropaties.disabled)">
             <span class="tooltip-text">{{tooltips.tooltipText}}</span>
             <font-awesome-icon :icon="tooltips.iconName"/>
-        </Button>
+        </button>
     </div>
 </template>
 
@@ -32,7 +32,10 @@
         font-size: 0.7rem;
         box-shadow: 1px 1px 4px 0px rgb(15 0 0 / 60%);
     }
-
+    .tool[area-disabled="true"] {
+        filter: blur(1px);
+    }
+    
     /* ツールチップのテキスト */
     .tooltip-text {
         opacity: 0; 
