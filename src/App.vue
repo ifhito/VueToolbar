@@ -63,7 +63,6 @@
     switch(event){
       case "scissors":
         if (navigator.clipboard && !select.value.toString() == false) {
-          console.log("test")
           await navigator.clipboard.writeText(select.value.toString());
           select.value.deleteFromDocument();
           disableFunc()
@@ -119,7 +118,7 @@
       iconName: "copy",
       tabindex: -1,
       tooltipText: "コピーする",
-      onClick: (disabled:boolean|null)=> disabled ? console.log(disabled) : console.log(disabled),
+      onClick: (disabled:boolean|null)=> disabled ? null : CPCFunc("copy"),
       areaPropaties: {
         pressed: null,
         disabled: true
@@ -129,7 +128,7 @@
       iconName: "scissors",
       tabindex: -1,
       tooltipText: "カットする",
-      onClick: (disabled:boolean|null)=> disabled ? console.log(disabled) : CPCFunc("scissors"),
+      onClick: (disabled:boolean|null)=> disabled ? null : CPCFunc("scissors"),
       areaPropaties: {
         pressed: null,
         disabled: true
@@ -171,7 +170,6 @@
       case "ArrowRight":
         if(!elements[index + 1]) return
         changeTabindex(index, -1);
-        console.log(elements[index + 1].focus())
         elements[index + 1].focus()
         changeTabindex(index + 1, 0);
         break;
