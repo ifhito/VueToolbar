@@ -173,6 +173,16 @@
         elements[index + 1].focus()
         changeTabindex(index + 1, 0);
         break;
+      case "Home":
+        changeTabindex(index, -1)
+        elements[0].focus()
+        changeTabindex(0, 0)
+        break;
+      case "End":
+        changeTabindex(index, -1)
+        elements[elements.length - 1].focus()
+        changeTabindex(elements.length - 1, 0)
+        break;
     }
   }
   // tabindexを変更する関数。
