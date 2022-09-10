@@ -33,7 +33,7 @@
         box-shadow: 1px 1px 4px 0px rgb(15 0 0 / 60%);
     }
     .tool[area-disabled="true"] {
-        filter: blur(1px);
+        opacity: 0.5;
     }
     
     /* ツールチップのテキスト */
