@@ -12,6 +12,7 @@
   const func = ref(()=>{alert("click")})
   const select = ref()
   const selectText = ref<string | undefined>('')
+  const alertText = ref('')
   const selected = ref(()=> {
     select.value = window.getSelection()
     selectText.value = window.getSelection()?.toString()
@@ -37,6 +38,7 @@
   }
   watch(selectText, disableFunc, {immediate: true})
   
+  // TODO: SELECTした文字全てを置き換えてしまうものの修正
   // DONE: spanでboldした後の続きの文章は普通の文字にしたい。
   const changeStyleFunc = (style:string) => {
     if(!select.value?.rangeCount) return;
@@ -64,6 +66,7 @@
       case "scissors":
         if (navigator.clipboard && !select.value.toString() == false) {
           await navigator.clipboard.writeText(select.value.toString());
+          alertText.value = `${selectText.value}をカットしました`
           select.value.deleteFromDocument();
           disableFunc()
         } else {
@@ -73,6 +76,7 @@
       case "copy":
         if (navigator.clipboard && !select.value.toString() == false) {
           await navigator.clipboard.writeText(select.value.toString());
+          alertText.value = `${selectText.value}をコピーしました`
           disableFunc()
         } else {
           alert("clipboardAPIに対応していません");
@@ -81,11 +85,11 @@
       case "paste":
         if (navigator.clipboard) {
           const target = document.getElementById("textarea-sent");
-          await navigator.clipboard.readText().then((text)=>{
-            if (!select.value || !select.value.rangeCount) throw new Error("何かおかしい");
-            select.value.deleteFromDocument();
-            select.value.getRangeAt(0).insertNode(document.createTextNode(text));
-          });
+          const text = await navigator.clipboard.readText()
+          if (!select.value || !select.value.rangeCount) throw new Error("何かおかしい");
+          select.value.deleteFromDocument();
+          select.value.getRangeAt(0).insertNode(document.createTextNode(text));
+          alertText.value = `${text}をペーストしました`
         } else {
           alert("clipboardAPIに対応していません");
         }
@@ -96,7 +100,7 @@
       iconName: "bold",
       tabindex: 0,
       tooltipText: "太文字にする",
-      onClick: ()=>changeStyleFunc("font-weight: bold;"),
+      onClick: ()=>{changeStyleFunc("font-weight: bold;"); alertText.value = `${selectText.value}を太文字にしました`},
       areaPropaties: {
         pressed: false,
         disabled: null
@@ -106,7 +110,7 @@
       iconName: "palette",
       tabindex: -1,
       tooltipText: "色を青に変更する",
-      onClick: ()=>changeStyleFunc("color: blue;"),
+      onClick: ()=>{changeStyleFunc("color: blue;"); alertText.value = `${selectText.value}を青色にしました`},
       areaPropaties: {
         pressed: false,
         disabled: null
@@ -202,7 +206,6 @@
   
   <template>
     <label class="toolbar-label" for="textarea-sent">RICH TEXTBOXS</label>
-    {{select}}
     <ToolBar @keydown="changeTool" :tool-bar-list="toolBarList"/>
     <div
     role="textarea"
@@ -219,6 +222,7 @@
     area-labeledby="richtextbox"
     >
     </div>
+    <span role="alert" aria-live="assertive" class="alert">{{alertText}}</span>
   </template>
   
   <style scoped>
@@ -234,6 +238,9 @@
     }
     .toolbar-label {
       color:chocolate;
+    }
+    .alert {
+      opacity: 0;
     }
   </style>
   
