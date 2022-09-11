@@ -1,6 +1,6 @@
 export type areaPropaties = {
-  pressed: boolean | null;
-  disabled: boolean | null;
+  isPressed: boolean | null;
+  isDisabled: boolean | null;
 };
 
 export type tooltipType = {

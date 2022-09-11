@@ -10,6 +10,7 @@
         }[];
     }
     const props = defineProps<Props>()
+    console.log(props.toolBarList[0].tooltipsGroupList[0].areaPropaties.isDisabled)
 </script>
     
 <template>
