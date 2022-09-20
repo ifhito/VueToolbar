@@ -4,13 +4,14 @@
     import ButtonWrapper from '../Atoms/ButtonWrapper.vue';
     type Props = {
         tooltipsList: tooltipsGroupType;
+        explanation: string
     }
     const props = defineProps<Props>()
     console.log(props.tooltipsList[0].areaPropaties.isDisabled)
 </script>
     
 <template>
-    <div class="toolGroup">
+    <div class="toolGroup" :aria-label="explanation">
         <button-wrapper :tabindex="tooltips.tabindex" v-for="tooltips in tooltipsList" v-bind:key="tooltips.iconName" :onClick="tooltips.onClick" v-bind:isDisabled="tooltips.areaPropaties.isDisabled" v-bind:isPressed="tooltips.areaPropaties.isPressed">
             <span class="tooltip-text">{{tooltips.tooltipText}}</span>
             <font-awesome-icon :icon="tooltips.iconName"/>

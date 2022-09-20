@@ -7,6 +7,7 @@
         toolBarList: {
             GroupName: string;
             tooltipsGroupList: tooltipsGroupType;
+            explanation: string;
         }[];
     }
     const props = defineProps<Props>()
@@ -14,8 +15,8 @@
 </script>
     
 <template>
-    <div class="toolbar" >
-        <ToolTipsGroup v-for="toolBar in toolBarList" v-bind:key="toolBar.GroupName" :tooltips-list="toolBar.tooltipsGroupList" />
+    <div class="toolbar" role="toolbar" aria-controls="textarea-sent">
+        <ToolTipsGroup v-for="toolBar in toolBarList" v-bind:key="toolBar.GroupName" :tooltips-list="toolBar.tooltipsGroupList" :explanation="toolBar.explanation"/>
     </div>
 </template>
 

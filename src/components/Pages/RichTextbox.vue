@@ -150,11 +150,13 @@
     const toolBarList = ref([
       {
         GroupName: "FixStyle",
-        tooltipsGroupList: tooltipsListOfFixStyle.value
+        tooltipsGroupList: tooltipsListOfFixStyle.value,
+        explanation: "スタイル変更用のツール"
       },
       {
         GroupName: "CopyAndPasteAndCut",
-        tooltipsGroupList: tooltipsListOfCCP.value
+        tooltipsGroupList: tooltipsListOfCCP.value,
+        explanation: "コピーペースト、カットのツール"
       }
     ])
   
