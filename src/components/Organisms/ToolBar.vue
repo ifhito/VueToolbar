@@ -9,6 +9,7 @@
             tooltipsGroupList: tooltipsGroupType;
             explanation: string;
         }[];
+        opacity: number;
     }
     const props = defineProps<Props>()
     console.log(props.toolBarList[0].tooltipsGroupList[0].areaPropaties.isDisabled)
@@ -16,7 +17,7 @@
     
 <template>
     <div class="toolbar" role="toolbar" aria-controls="textarea-sent">
-        <ToolTipsGroup v-for="toolBar in toolBarList" v-bind:key="toolBar.GroupName" :tooltips-list="toolBar.tooltipsGroupList" :explanation="toolBar.explanation"/>
+        <ToolTipsGroup v-for="toolBar in toolBarList" v-bind:key="toolBar.GroupName" :tooltips-list="toolBar.tooltipsGroupList" :explanation="toolBar.explanation" :opacity="opacity"/>
     </div>
 </template>
 
@@ -29,6 +30,9 @@
     padding: 0.1em 1.5rem;
     box-shadow: 1px 1px 7px 0px rgb(15 0 0 / 60%);
     border-radius: 10px;
+}
+.toolbar:focus-within {
+    outline: auto;
 }
 </style>
     

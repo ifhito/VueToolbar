@@ -4,7 +4,8 @@
     import ButtonWrapper from '../Atoms/ButtonWrapper.vue';
     type Props = {
         tooltipsList: tooltipsGroupType;
-        explanation: string
+        explanation: string;
+        opacity: number;
     }
     const props = defineProps<Props>()
     console.log(props.tooltipsList[0].areaPropaties.isDisabled)
@@ -12,8 +13,7 @@
     
 <template>
     <div class="toolGroup" :aria-label="explanation">
-        <button-wrapper :tabindex="tooltips.tabindex" v-for="tooltips in tooltipsList" v-bind:key="tooltips.iconName" :onClick="tooltips.onClick" v-bind:isDisabled="tooltips.areaPropaties.isDisabled" v-bind:isPressed="tooltips.areaPropaties.isPressed">
-            <span class="tooltip-text">{{tooltips.tooltipText}}</span>
+        <button-wrapper :opacity="opacity"  :button-tab-index="tooltips.tabindex" v-for="tooltips in tooltipsList" v-bind:key="tooltips.iconName" :onClick="tooltips.onClick" v-bind:isDisabled="tooltips.areaPropaties.isDisabled" v-bind:isPressed="tooltips.areaPropaties.isPressed" :tooltip-text="tooltips.tooltipText">
             <font-awesome-icon :icon="tooltips.iconName"/>
         </button-wrapper>
     </div>
@@ -26,35 +26,6 @@
         padding: 0.1rem 0.3rem;
         border-radius: 10px;
         box-shadow: inset 1px 1px 7px 0px rgb(15 0 0 / 60%);
-    }
-    
-    /* ツールチップのテキスト */
-    .tooltip-text {
-        opacity: 0; 
-        visibility: hidden; 
-        position: absolute; 
-        left: 50%; 
-        transform: translateX(-50%); 
-        bottom: 40px; 
-        display: inline-block;
-        padding: 5px; 
-        white-space: nowrap; 
-        font-size: 0.5rem;
-        line-height: 1.3; 
-        background: #333; 
-        color: #fff; 
-        border-radius: 3px;
-        transition: 0.5s tooltip-test ease;
-    }
-
-    /* ホバー時にツールチップの非表示を解除 */
-    .tool:hover .tooltip-text {
-        opacity: 1;
-        visibility: visible;
-    }
-    .tool:focus .tooltip-text {
-        opacity: 1;
-        visibility: visible;
     }
 
 </style>

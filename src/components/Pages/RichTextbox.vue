@@ -104,6 +104,7 @@
           }
       }
     }
+    const opacity = ref(1)
     const tooltipsListOfFixStyle = ref([
       {
         iconName: "bold",
@@ -172,9 +173,11 @@
     ])
   
     const changeTool = (event) => {
+      
       const elements = document.getElementsByClassName('tooltip')
       const index = [].findIndex.call(elements, e => e === event.target)
       const moveFocus = (nowIndex:number, afterIndex: number) => {
+        opacity.value = 1
         changeTabindex(nowIndex, - 1);
         elements[afterIndex].focus()
         changeTabindex(afterIndex, 0);
@@ -201,6 +204,10 @@
         case "End":
           moveFocus(index, elements.length - 1)
           break;
+        case "Escape":
+          console.log("event", opacity.value)
+          opacity.value = 0
+          break;
       }
     }
     // tabindexを変更する関数。
@@ -220,7 +227,7 @@
     
     <template>
       <label class="toolbar-label" for="textarea-sent">RICH TEXTBOXS</label>
-      <ToolBar @keydown="changeTool" :tool-bar-list="toolBarList"/>
+      <ToolBar @keydown="changeTool" :tool-bar-list="toolBarList" :opacity="opacity"/>
       <div
       role="textarea"
       @select="selected"
