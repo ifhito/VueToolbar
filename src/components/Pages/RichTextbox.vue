@@ -24,21 +24,31 @@
           item.areaPropaties.isDisabled = true
           return item 
         })
+        const tempFixList = tooltipsListOfFixStyle.value.map((item) => {
+          item.areaPropaties.isDisabled = true
+          return item
+        })
         tooltipsListOfCCP.value = templist
+        tooltipsListOfFixStyle.value = tempFixList
       }else{
         const templist = tooltipsListOfCCP.value.map((item)=>{
           if(item.iconName === "paste" && text === '') return item
           item.areaPropaties.isDisabled = false
           return item 
         })
+        const tempFixList = tooltipsListOfFixStyle.value.map((item) => {
+          item.areaPropaties.isDisabled = false
+          return item
+        })
         tooltipsListOfCCP.value = templist
+        tooltipsListOfFixStyle.value = tempFixList
       }
     }
     watch(selectText, disableFunc, {immediate: true})
     
     // TODO: SELECTした文字全てを置き換えてしまうものの修正
     // DONE: spanでboldした後の続きの文章は普通の文字にしたい。
-    const changeStyleFunc = (style:string) => {
+    const changeStyleFunc = (style:string, text: string) => {
       if(!select.value?.rangeCount) return;
       const range = select.value.getRangeAt(0);
       const newNode = document.createElement('span');
@@ -56,6 +66,7 @@
       r.setEnd(textarea, textarea?.childNodes.length);
       select.value.removeAllRanges();
       select.value.addRange(r);
+      alertText.value = text
     }
     
     // DONE:クリップボードへのペースト
@@ -98,20 +109,20 @@
         iconName: "bold",
         tabindex: 0,
         tooltipText: "太文字にする",
-        onClick: ()=>{changeStyleFunc("font-weight: bold;"); alertText.value = `${selectText.value}を太文字にしました`},
+        onClick: (disabled:boolean|null)=>{disabled ? null : changeStyleFunc("font-weight: bold;", `${selectText.value}を太文字にしました`); },
         areaPropaties: {
           isPressed: false,
-          isDisabled: null
+          isDisabled: true
         }
       },
       {
         iconName: "palette",
         tabindex: -1,
         tooltipText: "色を青に変更する",
-        onClick: ()=>{changeStyleFunc("color: blue;"); alertText.value = `${selectText.value}を青色にしました`},
+        onClick: (disabled:boolean|null)=>{disabled ? null : changeStyleFunc("color: blue;", `${selectText.value}を青色にしました`);},
         areaPropaties: {
           isPressed: false,
-          isDisabled: null
+          isDisabled: true
         }
       }
     ])
