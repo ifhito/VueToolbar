@@ -70,7 +70,7 @@
     }
     
     // DONE:クリップボードへのペースト
-    const CPCFunc = async (event) => {
+    const CPCFunc = async (event:string) => {
       switch(event){
         case "scissors":
           if (navigator.clipboard && !select.value.toString() == false) {
@@ -174,29 +174,32 @@
     const changeTool = (event) => {
       const elements = document.getElementsByClassName('tooltip')
       const index = [].findIndex.call(elements, e => e === event.target)
+      const moveFocus = (nowIndex:number, afterIndex: number) => {
+        changeTabindex(nowIndex, - 1);
+        elements[afterIndex].focus()
+        changeTabindex(afterIndex, 0);
+      }
       switch(event.key){
         case "ArrowLeft":
           // 矢印キーが押されたら、フォーカスとtabindexを変更する。
-          if(!elements[index - 1]) return
-          changeTabindex(index, - 1);
-          elements[index - 1].focus()
-          changeTabindex(index - 1, 0);
+          if(!elements[index - 1]) {
+            moveFocus(index, elements.length - 1)
+          } else {
+            moveFocus(index, index - 1)
+          }
           break;
         case "ArrowRight":
-          if(!elements[index + 1]) return
-          changeTabindex(index, -1);
-          elements[index + 1].focus()
-          changeTabindex(index + 1, 0);
+          if(!elements[index + 1]) {
+            moveFocus(index, 0)
+          }else {
+            moveFocus(index, index + 1)
+          }
           break;
         case "Home":
-          changeTabindex(index, -1)
-          elements[0].focus()
-          changeTabindex(0, 0)
+          moveFocus(index, 0)
           break;
         case "End":
-          changeTabindex(index, -1)
-          elements[elements.length - 1].focus()
-          changeTabindex(elements.length - 1, 0)
+          moveFocus(index, elements.length - 1)
           break;
       }
     }
